@@ -77,6 +77,7 @@ CREATE TABLE IF NOT EXISTS Atributos (
 -- 10. Tabela de Personagem (Expandida com Vida, Status, RP e Sub-raça)
 CREATE TABLE IF NOT EXISTS Personagem (
     id SERIAL PRIMARY KEY, 
+    usuario_id INT,
     nome VARCHAR(100) NOT NULL,
     raca_id INT NOT NULL, 
     subraca_id INT,
@@ -98,6 +99,7 @@ CREATE TABLE IF NOT EXISTS Personagem (
     CONSTRAINT fk_personagem_raca FOREIGN KEY (raca_id) REFERENCES Racas(id),
     CONSTRAINT fk_personagem_subraca FOREIGN KEY (subraca_id) REFERENCES Sub_Racas(id),
     CONSTRAINT fk_personagem_origem FOREIGN KEY (origem_id) REFERENCES Origens(id),
+    CONSTRAINT fk_personagem_usuario FOREIGN KEY (usuario_id) REFERENCES Usuarios(id) ON DELETE CASCADE,
     CONSTRAINT fk_personagem_atributos FOREIGN KEY (atributos_id) REFERENCES Atributos(id) ON DELETE CASCADE
 );
 
@@ -227,7 +229,7 @@ CREATE TABLE IF NOT EXISTS Inventario_Personagem (
     CONSTRAINT fk_inv_equipamento FOREIGN KEY (equipamento_id) REFERENCES Equipamentos(id) ON DELETE CASCADE
 );
 
--- 25. NOVA TABELA INTERMEDIÁRIA: Rastreamento de Slots de Magia do Personagem (Consumo Diário)
+-- 25. NOVA TABELA INTERMEDIÁRIA: Rastreamento de Slots de Magia do Personagem
 CREATE TABLE IF NOT EXISTS Personagem_Slots_Magia (
     personagem_id INT NOT NULL,
     circulo INT NOT NULL CHECK (circulo BETWEEN 1 AND 9),
@@ -235,4 +237,13 @@ CREATE TABLE IF NOT EXISTS Personagem_Slots_Magia (
     slots_atuais INT NOT NULL DEFAULT 0, 
     PRIMARY KEY (personagem_id, circulo),
     CONSTRAINT fk_slots_personagem FOREIGN KEY (personagem_id) REFERENCES Personagem(id) ON DELETE CASCADE
+);
+
+-- 26. Tabela de Usuários para Login, Gerenciamento de Contas e Personagens
+CREATE TABLE IF NOT EXISTS Usuarios (
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE, 
+    senha VARCHAR(255) NOT NULL,
+    telefone VARCHAR(20)
 );
