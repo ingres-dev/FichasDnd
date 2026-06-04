@@ -10,7 +10,8 @@ CREATE TABLE IF NOT EXISTS Idiomas (
 CREATE TABLE IF NOT EXISTS Racas (
     id INT NOT NULL PRIMARY KEY,
     nome VARCHAR(30) NOT NULL,
-    tamanho VARCHAR(20)
+    tamanho VARCHAR(20),
+    movimento INT NOT NULL DEFAULT 30
 );
 
 -- 3. NOVA TABELA: Sub-raças (Ex: Alto Elfo, Anão da Montanha)
@@ -25,8 +26,8 @@ CREATE TABLE IF NOT EXISTS Sub_Racas (
 CREATE TABLE IF NOT EXISTS Raca_Idiomas (
     raca_id INT NOT NULL,
     id_idioma INT NOT NULL,
-    movimento INT,
     PRIMARY KEY (raca_id, id_idioma),
+    
     CONSTRAINT fk_raca_idioma_raca FOREIGN KEY (raca_id) REFERENCES Racas(id) ON DELETE CASCADE,
     CONSTRAINT fk_raca_idioma_idioma FOREIGN KEY (id_idioma) REFERENCES Idiomas(id) ON DELETE CASCADE
 );
